@@ -14,8 +14,8 @@ def display_menu():
 	print("4. Show Match History")
 	print("5. Finish")
 
-def display_separator():
-    lines = "-" * 58
+def display_separator(symbol):
+    lines = symbol * 58
     print(lines)
 
 def input_code(item_list):
@@ -26,72 +26,124 @@ def input_code(item_list):
 def get_user_input(start,end):
 	choice = input("Enter your choice: ")
 	while (not choice.isdigit() or int(choice) > end or int(choice) < start):
-		print("Invalid menu option.")
+		print("Invalid option.")
 		choice = input("Please try again: ")
 	return int(choice)
-
+	
 def matchPlayers(playersList, tournament):
 	round = Round(playersList)
 	tournament.addRound(round)
-	roundNo = tournament.getRound()
-	print("Round " + str(roundNo))
+	roundNo = tournament.getRoundNo()
+	print("Match Players (Round " + str(roundNo) + ")")
 	print()
-	round.matchPlayers()
+	round.matchPlayers(tournament)
 	
-def showScores(playersList):
+def showScores(playersList, tournament):
+	print("Show Scores")
+	print()
 	plist = list(playersList.values())
-	plist.sort(key=lambda x: (x.getPlayerNo(), x.getMatchPt(), x.getOppMatchPerc(), x.getGamePerc(), ))
-	count = 1
-	print("Rank  Player    W-L-T     Match Pts")
+	plist.sort(key=lambda x: x.getPlayerNo())
+	plist.sort(key=lambda x: (x.getMatchPt(), x.getOppMatchPerc(), x.getGamePerc(), x.getOppGamePerc()), reverse=True)
+	###TESTING###
 	for player in plist:
-		stats = player.displayStats()
-		# if (len(str(count)) > 1):
-			# print(str(count) + ('.\t').expandtabs(2) + stats)
-		# else:
+		print(player.getName(), 'MatchW', player.getMatchW(), 'MatchL', player.getMatchL(), 'MatchT', player.getMatchT(), 'MatchPt', player.getMatchPt(), 'MatchPerc', player.getMatchPerc(), 'OppMatchPerc', player.getOppMatchPerc(), 'GameW', player.getGameW(), 'GameL', player.getGameL(), 'GameT', player.getGameT(), 'GamePt', player.getGamePt(), 'GamePerc', player.getGamePerc(), 'OppGamePerc', player.getOppGamePerc(), 'OppList', player.getOppList())
+	print()
+	###TESTING###
+	count = 1
+	maxPlayerLen = tournament.getMaxPlayerLen() + 1
+	if (maxPlayerLen < 10):
+		maxPlayerLen = 10
+	print(('Rank  {:<' + str(maxPlayerLen) + '} W-L-T     Match Pts   Opponents').format('Player'))
+	for player in plist:
+		stats = player.displayStats(maxPlayerLen)
 		print((str(count) + '.\t').expandtabs(6) + stats)
 		count += 1
 	
-def editScores():
-	#TODO
-	pass
+def editScores(tournament):
+	print("Edit Scores")
+	print()
+	tournament.displayRounds()
+	rounds = tournament.getRoundNo()
+	if (rounds != 0):
+		print(str(rounds+1) + ". Cancel")
+		display_separator("-")
+		option = get_user_input(1, rounds+1)
+		display_separator("-")
+		if (option != (rounds+1)):
+			round = tournament.getRound(option)
+			print("Edit Scores (Round " + str(option) + ")")
+			print()
+			round.displayRound(tournament)
+			matches = round.getMatchNo()
+			print(str(matches+1) + ". Cancel")
+			display_separator("-")
+			option = get_user_input(1, matches+1)
+			display_separator("-")
+			if (option != (matches+1)):
+				match = round.getMatch(option)
+				print("Edit Scores (Match " + str(option) + ")")
+				print()
+				match.displayMatch(tournament)
+				player1 = match.getPlayer1()
+				player2 = match.getPlayer2()
+				display_separator("-")
+				if (player2 != "bye"):
+					if (match.getGames() != 0):
+						match.resetScores()
+					while True:
+						try:
+							player1Score = int(input(player1.getName() + "'s Score: "))
+							player2Score = int(input(player2.getName() + "'s Score: "))
+							while (player1Score > 2 or player1Score < 0 or player2Score > 2 or player2Score < 0):
+								player1Score = int(input(player1.getName() + "'s Score: "))
+								player2Score = int(input(player2.getName() + "'s Score: "))
+							break
+						except ValueError:
+							print("Invalid input.")
+					match.setPlayer1Score(player1Score)
+					match.setPlayer2Score(player2Score)
+					winner = match.getWinner()
+				else:
+					print("Cannot edit score.")
+	else:
+		print("No rounds have been played.")
+		
 	
 def main_menu(playersList, tournament):
 	display_menu()
-	display_separator()
+	display_separator("-")
 	option = get_user_input(1,5)
 	while option != 5:
-		display_separator()
+		display_separator("-")
 		if option == 1:
 			matchPlayers(playersList, tournament)
 		elif option == 2:
-			showScores(playersList)
+			showScores(playersList, tournament)
 		elif option == 3:
-			editScores()
+			editScores(tournament)
 		else:
 			tournament.displayTournament()
-		display_separator()
+		display_separator("=")
 		display_menu()
-		display_separator()
-		option = get_user_input(1,6)
-	line = "=" * 58
-	print(line)
-	showScores(playersList)
-	print(line)
+		display_separator("-")
+		option = get_user_input(1,5)
+	display_separator("=")
+	showScores(playersList, tournament)
+	display_separator("=")
 
-def players(noOfPlayers):
+def players(noOfPlayers, tournament):
 	playersList = {}
 	for i in range(1, noOfPlayers+1):
 		name = input("Player " + str(i) + ": ")
 		player = Player(i, name)
 		playersList[name] = player
-	#print(playersList)
+		tournament.addPlayer(player)
 	return playersList	
 
 def main():
-	line = "=" * 58
-	print(line)
+	display_separator("=")
 	display_intro()
-	print(line)
+	display_separator("=")
 	while True:
 		try:
 			noOfPlayers = int(input("Number of players: "))
@@ -101,9 +153,9 @@ def main():
 				break
 		except ValueError:
 			print("Invalid input. Please Try again.")
-	playersList = players(noOfPlayers)
-	display_separator()
 	tournament = Tournament()
+	playersList = players(noOfPlayers, tournament)
+	display_separator("-")
 	main_menu(playersList, tournament)
 
 main()

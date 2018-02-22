@@ -1,3 +1,5 @@
+from Match import Match
+
 class Player:
 	def __init__(self, player, name):
 		self.player = player		# the player number
@@ -27,6 +29,9 @@ class Player:
 	def setName(self, name):
 		self.name = name
 		
+	def getNameLength(self):
+		return len(self.name)
+	
 	def getMatches(self):
 		return self.matches
 	
@@ -36,32 +41,44 @@ class Player:
 	def getMatchW(self):
 		return self.matchW
 		
-	def setMatchW(self):
-		self.matchW += 1
+	def setMatchW(self, matchW):
+		self.matchW += matchW
 		
 	def getMatchL(self):
 		return self.matchL
 	
-	def setMatchL(self):
-		self.matchL += 1
+	def setMatchL(self, matchL):
+		self.matchL += matchL
 		
 	def getMatchT(self):
 		return self.matchT
 	
-	def setMatchT(self):
-		self.matchT += 1
+	def setMatchT(self, matchT):
+		self.matchT += matchT
 		
 	def getMatchPt(self):
 		self.matchPt = (3 * self.matchW) + (0 * self.matchL) + (1 * self.matchT)
 		return self.matchPt
 		
 	def getMatchPerc(self):
-		self.matchPerc = self.matchPt / (self.matches * 3)
+		if (self.matches != 0):
+			self.matchPerc = self.matchPt / (self.matches * 3)
+		if (self.matchPerc < 0.33):
+			self.matchPerc = 0.33
 		return self.matchPerc
 		
 	def getOppMatchPerc(self):
-		#TODO
-		return self.oppMatchPerc
+		count = 0
+		self.oppMatchPerc = 0
+		if (len(self.oppList) != 0):
+			for opponent in self.oppList:
+				if (opponent != 'bye'):
+					self.oppMatchPerc += opponent.getMatchPerc()
+					count += 1
+		if (count != 0):
+			return self.oppMatchPerc / count
+		else:
+			return self.oppMatchPerc
 		
 	def getGames(self):
 		return self.games
@@ -94,18 +111,45 @@ class Player:
 	def getGamePerc(self):
 		if (self.games != 0):
 			self.gamePerc = self.gamePt / (self.games * 3)
+		if (self.gamePerc < 0.33):
+			self.gamePerc = 0.33
 		return self.gamePerc
 		
 	def getOppGamePerc(self):
-		#TODO
-		return self.oppGamePerc
+		count = 0
+		self.oppGamePerc = 0
+		if (len(self.oppList) != 0):
+			for opponent in self.oppList:
+				if (opponent != 'bye'):
+					self.oppGamePerc += opponent.getGamePerc()
+					count += 1
+		if (count != 0):
+			return self.oppGamePerc / count
+		else:
+			return self.oppGamePerc
 		
 	def getOppList(self):
-		#TODO
-		return self.oppList
+		line = ""
+		if (len(self.oppList) != 0):
+			for i in range(0, len(self.oppList)):
+				if (i == len(self.oppList)-1):
+					if (self.oppList[i] == "bye"):
+						line += "bye"
+					else:
+						line += (self.oppList[i]).getName()
+				else:
+					if (self.oppList[i] == "bye"):
+						line += "bye, "
+					else:
+						line += (self.oppList[i]).getName() + ", "
+		else:
+			line = "No opponents played"
+		return line
 		
-	def setOppList(self, opponent):
+	def addOppList(self, opponent):
 		self.oppList.append(opponent)
 	
-	def displayStats(self):
-		return ('{0}' + '\t' + '{1}-{2}-{3}' + '\t' + '{4} pts').format(self.name, str(self.matchW), str(self.matchL), str(self.matchT), str(self.matchPt)).expandtabs(10)
+	def displayStats(self, maxPlayerLen):
+		scores = str(self.matchW) + '-' + str(self.matchL) + '-' + str(self.matchT)
+		points = str(self.matchPt) + ' pts'
+		return ('{:<' + str(maxPlayerLen) + '} ' + '{:<10}{:<12}' + self.getOppList()).format(self.name, scores, points)
