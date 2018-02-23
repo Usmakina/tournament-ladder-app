@@ -127,8 +127,11 @@ class Player:
 			return self.oppGamePerc / count
 		else:
 			return self.oppGamePerc
-		
+	
 	def getOppList(self):
+		return self.oppList
+	
+	def getOppListStr(self):
 		line = ""
 		if (len(self.oppList) != 0):
 			for i in range(0, len(self.oppList)):
@@ -152,4 +155,4 @@ class Player:
 	def displayStats(self, maxPlayerLen):
 		scores = str(self.matchW) + '-' + str(self.matchL) + '-' + str(self.matchT)
 		points = str(self.matchPt) + ' pts'
-		return ('{:<' + str(maxPlayerLen) + '} ' + '{:<10}{:<12}' + self.getOppList()).format(self.name, scores, points)
+		return ('{:<' + str(maxPlayerLen) + '} ' + '{:<10}{:<12}' + self.getOppListStr()).format(self.name, scores, points)

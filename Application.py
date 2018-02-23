@@ -46,7 +46,7 @@ def showScores(playersList, tournament):
 	plist.sort(key=lambda x: (x.getMatchPt(), x.getOppMatchPerc(), x.getGamePerc(), x.getOppGamePerc()), reverse=True)
 	###TESTING###
 	for player in plist:
-		print(player.getName(), 'MatchW', player.getMatchW(), 'MatchL', player.getMatchL(), 'MatchT', player.getMatchT(), 'MatchPt', player.getMatchPt(), 'MatchPerc', player.getMatchPerc(), 'OppMatchPerc', player.getOppMatchPerc(), 'GameW', player.getGameW(), 'GameL', player.getGameL(), 'GameT', player.getGameT(), 'GamePt', player.getGamePt(), 'GamePerc', player.getGamePerc(), 'OppGamePerc', player.getOppGamePerc(), 'OppList', player.getOppList())
+		print(player.getName(), 'MatchW', player.getMatchW(), 'MatchL', player.getMatchL(), 'MatchT', player.getMatchT(), 'MatchPt', player.getMatchPt(), 'MatchPerc', player.getMatchPerc(), 'OppMatchPerc', player.getOppMatchPerc(), 'GameW', player.getGameW(), 'GameL', player.getGameL(), 'GameT', player.getGameT(), 'GamePt', player.getGamePt(), 'GamePerc', player.getGamePerc(), 'OppGamePerc', player.getOppGamePerc(), 'OppList', player.getOppListStr())
 	print()
 	###TESTING###
 	count = 1
@@ -88,18 +88,27 @@ def editScores(tournament):
 				player2 = match.getPlayer2()
 				display_separator("-")
 				if (player2 != "bye"):
-					if (match.getGames() != 0):
+					if (match.getPlayed() == "yes"):
 						match.resetScores()
 					while True:
 						try:
 							player1Score = int(input(player1.getName() + "'s Score: "))
-							player2Score = int(input(player2.getName() + "'s Score: "))
-							while (player1Score > 2 or player1Score < 0 or player2Score > 2 or player2Score < 0):
-								player1Score = int(input(player1.getName() + "'s Score: "))
-								player2Score = int(input(player2.getName() + "'s Score: "))
-							break
+							if (player1Score > 2 or player1Score < 0):
+								print("Invalid input.")
+							else:
+								break
 						except ValueError:
 							print("Invalid input.")
+					while True:
+						try:
+							player2Score = int(input(player2.getName() + "'s Score: "))
+							if (player2Score > 2 or player2Score < 0):
+								print("Invalid input.")
+							else:
+								break
+						except ValueError:
+							print("Invalid input.")
+					match.setPlayed()
 					match.setPlayer1Score(player1Score)
 					match.setPlayer2Score(player2Score)
 					winner = match.getWinner()
@@ -118,6 +127,9 @@ def main_menu(playersList, tournament):
 		if option == 1:
 			matchPlayers(playersList, tournament)
 		elif option == 2:
+			plist = list(playersList.values())
+			plist.sort(key=lambda x: x.getPlayerNo())
+			plist.sort(key=lambda x: (x.getMatchPt(), x.getOppMatchPerc(), x.getGamePerc(), x.getOppGamePerc()), reverse=True)
 			showScores(playersList, tournament)
 		elif option == 3:
 			editScores(tournament)

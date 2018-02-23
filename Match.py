@@ -7,6 +7,7 @@ class Match:
 		self.player1Score = 0					#player1's score
 		self.player2Score = 0					#player2's score
 		self.winner = ""
+		self.played = "no"
 	
 	def getPlayer1(self):
 		return self.player1
@@ -30,21 +31,30 @@ class Match:
 		games = self.getPlayer1Score() + self.getPlayer2Score()
 		return games
 		
+	def getPlayed(self):
+		return self.played
+		
+	def setPlayed(self):
+		self.played = "yes"
+	
 	def resetScores(self):
 		winner = self.getWinner()
 		if (winner != "Tie"):
-			winner[0][0].setMatchW(-1)
-			winner[0][0].setGames(-(self.getGames()))
-			winner[0][0].setGameW(-(winner[0][1]))
-			winner[1][0].setMatchL(-1)
-			winner[1][0].setGames(-(self.getGames()))
-			winner[1][0].setGameL(-(winner[1][1]))
+			winner[0][0].setMatchW(-2)
+			winner[0][0].setGames(-((self.getGames())*2))
+			winner[0][0].setGameW(-((winner[0][1])*2))
+			winner[0][0].setGameL(-((winner[1][1])*2))
+			winner[1][0].setMatchL(-2)
+			winner[1][0].setGames(-((self.getGames())*2))
+			winner[1][0].setGameW(-((winner[1][1])*2))
+			winner[1][0].setGameL(-((winner[0][1])*2))
 		else:
-			self.player1.setMatchT(-1)
-			self.player1.setGameW(-1)
-			self.player1.setGameL(-1)
+			self.player1.setMatchT(-2)
+			self.player1.setGameW(-2)
+			self.player1.setGameL(-2)
 			self.player2.setMatchT(-2)
-			self.player2.setGameL(-1)
+			self.player2.setGameW(-2)
+			self.player2.setGameL(-2)
 	
 	def getWinner(self):
 		if (self.player2 == "bye"):
@@ -71,6 +81,14 @@ class Match:
 			self.player1.setGameL(self.player2Score)
 			return ((self.player2, self.player2Score), (self.player1, self.player1Score))
 		else:
+			self.player1.setMatchT(1)
+			self.player1.setGames(self.getGames())
+			self.player1.setGameW(self.player2Score)
+			self.player1.setGameL(self.player1Score)
+			self.player2.setMatchT(1)
+			self.player2.setGames(self.getGames())
+			self.player2.setGameW(self.player1Score)
+			self.player2.setGameL(self.player2Score)
 			return "Tie"
 			
 	def displayMatches(self, tournament, count):
