@@ -21,10 +21,12 @@ class Round:
 	def matchPlayers(self, tournament):
 		plist = list(self.playersList.values())
 		random.shuffle(plist)
+		plist.sort(key=lambda x: x.getGamePt(), reverse=True)
+		plist.sort(key=lambda x: x.getGamePerc(), reverse=True)
+		plist.sort(key=lambda x: x.getMatchPt(), reverse=True)
+		plist.sort(key=lambda x: x.getMatchPerc(), reverse=True)
 		plist.sort(key=lambda x: (x.getMatchPt(), x.getOppMatchPerc(), x.getGamePerc(), x.getOppGamePerc()), reverse=True)
 		for i in range(0, len(plist)):
-			#for player in plist:
-			#	print("list: " + player.getName())
 			player1 = plist[i]
 			player1.setMatches()
 			player2 = ""
@@ -47,6 +49,8 @@ class Round:
 				self.addMatch(match)
 				break
 			self.addMatch(match)
+			if (len(plist) == (len(self.playersList) / 2)):
+				break
 		self.displayRound(tournament)
 			
 	def displayRound(self, tournament):

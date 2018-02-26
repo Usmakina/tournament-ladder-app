@@ -97,7 +97,7 @@ class Match:
 		if (self.player2 != "bye"):
 			player2Name = self.player2.getName()
 		maxPlayerLen = tournament.getMaxPlayerLen()
-		print(('{:<3}{:>' + str(maxPlayerLen) + '}   vs   {:<' + str(maxPlayerLen) + '}').format(str(count) + ".", player1Name, player2Name))
+		print(('{:<4}{:>' + str(maxPlayerLen) + '}   vs   {:<' + str(maxPlayerLen) + '}').format(str(count) + ".", player1Name, player2Name))
 		
 	def displayMatch(self, tournament):
 		player1Name = self.player1.getName()
@@ -105,4 +105,4 @@ class Match:
 		if (self.player2 != "bye"):
 			player2Name = self.player2.getName()
 		maxPlayerLen = tournament.getMaxPlayerLen()
-		print(('{:>' + str(maxPlayerLen) + '} ({})  vs  ({}) {:<' + str(maxPlayerLen) + '}').format(player1Name, self.player1Score, self.player2Score, player2Name))
+		print(('{} ({})  vs  ({}) {:<' + str(maxPlayerLen) + '}').format(player1Name, self.player1Score, self.player2Score, player2Name))

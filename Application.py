@@ -42,18 +42,22 @@ def showScores(playersList, tournament):
 	print("Show Scores")
 	print()
 	plist = list(playersList.values())
-	plist.sort(key=lambda x: x.getPlayerNo())
+	plist.sort(key=lambda x: x.getPlayerNo(), reverse=True)
+	plist.sort(key=lambda x: x.getGamePt(), reverse=True)
+	plist.sort(key=lambda x: x.getGamePerc(), reverse=True)
+	plist.sort(key=lambda x: x.getMatchPt(), reverse=True)
+	plist.sort(key=lambda x: x.getMatchPerc(), reverse=True)
 	plist.sort(key=lambda x: (x.getMatchPt(), x.getOppMatchPerc(), x.getGamePerc(), x.getOppGamePerc()), reverse=True)
 	###TESTING###
-	for player in plist:
-		print(player.getName(), 'MatchW', player.getMatchW(), 'MatchL', player.getMatchL(), 'MatchT', player.getMatchT(), 'MatchPt', player.getMatchPt(), 'MatchPerc', player.getMatchPerc(), 'OppMatchPerc', player.getOppMatchPerc(), 'GameW', player.getGameW(), 'GameL', player.getGameL(), 'GameT', player.getGameT(), 'GamePt', player.getGamePt(), 'GamePerc', player.getGamePerc(), 'OppGamePerc', player.getOppGamePerc(), 'OppList', player.getOppListStr())
-	print()
+	# for player in plist:
+		# print(player.getName(), 'MatchW', player.getMatchW(), 'MatchL', player.getMatchL(), 'MatchT', player.getMatchT(), 'MatchPt', player.getMatchPt(), 'MatchPerc', player.getMatchPerc(), 'OppMatchPerc', player.getOppMatchPerc(), 'GameW', player.getGameW(), 'GameL', player.getGameL(), 'GameT', player.getGameT(), 'GamePt', player.getGamePt(), 'GamePerc', player.getGamePerc(), 'OppGamePerc', player.getOppGamePerc(), 'OppList', player.getOppListStr())
+	# print()
 	###TESTING###
 	count = 1
 	maxPlayerLen = tournament.getMaxPlayerLen() + 1
 	if (maxPlayerLen < 10):
 		maxPlayerLen = 10
-	print(('Rank  {:<' + str(maxPlayerLen) + '} W-L-T     Match Pts   Opponents').format('Player'))
+	print(('Rank  {:<' + str(maxPlayerLen) + '} MatchScore  MatchPts    MatchPerc   OppMatchPerc  GameScore   GamePts   GamePerc   OppGamePerc  Opponents').format('Player'))
 	for player in plist:
 		stats = player.displayStats(maxPlayerLen)
 		print((str(count) + '.\t').expandtabs(6) + stats)
@@ -127,9 +131,9 @@ def main_menu(playersList, tournament):
 		if option == 1:
 			matchPlayers(playersList, tournament)
 		elif option == 2:
-			plist = list(playersList.values())
-			plist.sort(key=lambda x: x.getPlayerNo())
-			plist.sort(key=lambda x: (x.getMatchPt(), x.getOppMatchPerc(), x.getGamePerc(), x.getOppGamePerc()), reverse=True)
+			# plist = list(playersList.values())
+			# plist.sort(key=lambda x: x.getPlayerNo())
+			# plist.sort(key=lambda x: (x.getMatchPt(), x.getOppMatchPerc(), x.getGamePerc(), x.getOppGamePerc()), reverse=True)
 			showScores(playersList, tournament)
 		elif option == 3:
 			editScores(tournament)

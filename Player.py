@@ -153,6 +153,12 @@ class Player:
 		self.oppList.append(opponent)
 	
 	def displayStats(self, maxPlayerLen):
-		scores = str(self.matchW) + '-' + str(self.matchL) + '-' + str(self.matchT)
-		points = str(self.matchPt) + ' pts'
-		return ('{:<' + str(maxPlayerLen) + '} ' + '{:<10}{:<12}' + self.getOppListStr()).format(self.name, scores, points)
+		matchScores = str(self.matchW) + '-' + str(self.matchL) + '-' + str(self.matchT)
+		matchPoints = str(self.getMatchPt()) + ' pts'
+		matchPerc = ('%.1f' % (self.matchPerc * 100)) + '%'
+		oppMatchPerc = ('%.1f' % (self.oppMatchPerc * 100)) + '%'
+		gameScores = str(self.gameW) + '-' + str(self.gameL) + '-' + str(self.gameT)
+		gamePoints = str(self.getGamePt()) + ' pts'
+		gamePerc = ('%.1f' % (self.getGamePerc()* 100)) + '%'
+		oppGamePerc = ('%.1f' % (self.getOppGamePerc() * 100)) + '%'
+		return ('{:<' + str(maxPlayerLen) + '} ' + '{:<12}{:<12}{:<12}{:<14}{:<12}{:<10}{:<11}{:<13}' + self.getOppListStr()).format(self.name, matchScores, matchPoints, matchPerc, oppMatchPerc, gameScores, gamePoints, gamePerc, oppGamePerc)
