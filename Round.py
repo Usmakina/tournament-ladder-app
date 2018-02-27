@@ -21,26 +21,19 @@ class Round:
 	def matchPlayers(self, tournament):
 		plist = list(self.playersList.values())
 		random.shuffle(plist)
-		plist.sort(key=lambda x: x.getGamePt(), reverse=True)
-		plist.sort(key=lambda x: x.getGamePerc(), reverse=True)
-		plist.sort(key=lambda x: x.getMatchPt(), reverse=True)
-		plist.sort(key=lambda x: x.getMatchPerc(), reverse=True)
+		for player in plist:
+			gamePt = player.getGamePt()
+			gamePerc = player.getGamePerc()
+			matchPt = player.getMatchPt()
+			matchPerc = player.getMatchPerc()
 		plist.sort(key=lambda x: (x.getMatchPt(), x.getOppMatchPerc(), x.getGamePerc(), x.getOppGamePerc()), reverse=True)
-		for i in range(0, len(plist)):
-			player1 = plist[i]
+		matchList = []
+		matchList = self.match(plist, matchList)
+		print()
+		for match in matchList:
+			player1 = match[0]
+			player2 = match[1]
 			player1.setMatches()
-			player2 = ""
-			if (i == len(plist)-1):
-				player2 = "bye"
-			else:
-			#	print(player1.getName())
-				for j in range(i+1, len(plist)):
-					if (plist[j] not in player1.getOppList()):
-						player2 = plist.pop(j)
-			#			print(player2.getName())
-						break
-				player2.setMatches()
-				player2.addOppList(player1)
 			player1.addOppList(player2)
 			match = Match(player1, player2)
 			if (player2 == "bye"):
@@ -48,10 +41,36 @@ class Round:
 				match.getWinner()
 				self.addMatch(match)
 				break
+			player2.setMatches()
+			player2.addOppList(player1)
 			self.addMatch(match)
-			if (len(plist) == (len(self.playersList) / 2)):
-				break
 		self.displayRound(tournament)
+			
+	def match(self, plist, matchList):
+		player1 = plist[0]
+		player2 = ""
+		if (len(plist) == 1):
+			player1 = plist.pop(0)
+			player2 = "bye"
+			matchList.append((player1, player2))
+			return matchList
+		for i in range(1, len(plist)):
+			if (plist[i] not in player1.getOppList()):
+				plistTemp = list(plist)
+				player2 = plistTemp.pop(i)
+				player1 = plistTemp.pop(0)
+				matchList.append((player1, player2))
+				currentLen = len(matchList)
+				if (len(plistTemp) == 0):
+					return matchList
+				else:
+					matchList2 = self.match(plistTemp, matchList)
+					if (len(matchList2) == currentLen):
+						matchList = matchList2[:-1]
+					else:
+						matchList = matchList2
+						break
+		return matchList
 			
 	def displayRound(self, tournament):
 		count = 1

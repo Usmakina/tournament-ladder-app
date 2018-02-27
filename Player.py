@@ -155,8 +155,8 @@ class Player:
 	def displayStats(self, maxPlayerLen):
 		matchScores = str(self.matchW) + '-' + str(self.matchL) + '-' + str(self.matchT)
 		matchPoints = str(self.getMatchPt()) + ' pts'
-		matchPerc = ('%.1f' % (self.matchPerc * 100)) + '%'
-		oppMatchPerc = ('%.1f' % (self.oppMatchPerc * 100)) + '%'
+		matchPerc = ('%.1f' % (self.getMatchPerc() * 100)) + '%'
+		oppMatchPerc = ('%.1f' % (self.getOppMatchPerc() * 100)) + '%'
 		gameScores = str(self.gameW) + '-' + str(self.gameL) + '-' + str(self.gameT)
 		gamePoints = str(self.getGamePt()) + ' pts'
 		gamePerc = ('%.1f' % (self.getGamePerc()* 100)) + '%'

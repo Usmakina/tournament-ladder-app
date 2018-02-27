@@ -39,20 +39,15 @@ def matchPlayers(playersList, tournament):
 	round.matchPlayers(tournament)
 	
 def showScores(playersList, tournament):
-	print("Show Scores")
 	print()
 	plist = list(playersList.values())
-	plist.sort(key=lambda x: x.getPlayerNo(), reverse=True)
-	plist.sort(key=lambda x: x.getGamePt(), reverse=True)
-	plist.sort(key=lambda x: x.getGamePerc(), reverse=True)
-	plist.sort(key=lambda x: x.getMatchPt(), reverse=True)
-	plist.sort(key=lambda x: x.getMatchPerc(), reverse=True)
+	plist.sort(key=lambda x: x.getPlayerNo())
+	for player in plist:
+		gamePt = player.getGamePt()
+		gamePerc = player.getGamePerc()
+		matchPt = player.getMatchPt()
+		matchPerc = player.getMatchPerc()
 	plist.sort(key=lambda x: (x.getMatchPt(), x.getOppMatchPerc(), x.getGamePerc(), x.getOppGamePerc()), reverse=True)
-	###TESTING###
-	# for player in plist:
-		# print(player.getName(), 'MatchW', player.getMatchW(), 'MatchL', player.getMatchL(), 'MatchT', player.getMatchT(), 'MatchPt', player.getMatchPt(), 'MatchPerc', player.getMatchPerc(), 'OppMatchPerc', player.getOppMatchPerc(), 'GameW', player.getGameW(), 'GameL', player.getGameL(), 'GameT', player.getGameT(), 'GamePt', player.getGamePt(), 'GamePerc', player.getGamePerc(), 'OppGamePerc', player.getOppGamePerc(), 'OppList', player.getOppListStr())
-	# print()
-	###TESTING###
 	count = 1
 	maxPlayerLen = tournament.getMaxPlayerLen() + 1
 	if (maxPlayerLen < 10):
@@ -131,9 +126,7 @@ def main_menu(playersList, tournament):
 		if option == 1:
 			matchPlayers(playersList, tournament)
 		elif option == 2:
-			# plist = list(playersList.values())
-			# plist.sort(key=lambda x: x.getPlayerNo())
-			# plist.sort(key=lambda x: (x.getMatchPt(), x.getOppMatchPerc(), x.getGamePerc(), x.getOppGamePerc()), reverse=True)
+			print("Show Scores")
 			showScores(playersList, tournament)
 		elif option == 3:
 			editScores(tournament)
@@ -144,6 +137,7 @@ def main_menu(playersList, tournament):
 		display_separator("-")
 		option = get_user_input(1,5)
 	display_separator("=")
+	print("Final Ranking")
 	showScores(playersList, tournament)
 	display_separator("=")
 
@@ -152,7 +146,7 @@ def players(noOfPlayers, tournament):
 	for i in range(1, noOfPlayers+1):
 		name = input("Player " + str(i) + ": ")
 		player = Player(i, name)
-		playersList[name] = player
+		playersList[i] = player
 		tournament.addPlayer(player)
 	return playersList	
 
