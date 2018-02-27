@@ -41,7 +41,6 @@ def matchPlayers(playersList, tournament):
 def showScores(playersList, tournament):
 	print()
 	plist = list(playersList.values())
-	plist.sort(key=lambda x: x.getPlayerNo())
 	for player in plist:
 		gamePt = player.getGamePt()
 		gamePerc = player.getGamePerc()
@@ -82,7 +81,7 @@ def editScores(tournament):
 				match = round.getMatch(option)
 				print("Edit Scores (Match " + str(option) + ")")
 				print()
-				match.displayMatch(tournament)
+				match.displayMatch(tournament.getMaxPlayerLen())
 				player1 = match.getPlayer1()
 				player2 = match.getPlayer2()
 				display_separator("-")
@@ -115,8 +114,7 @@ def editScores(tournament):
 					print("Cannot edit score.")
 	else:
 		print("No rounds have been played.")
-		
-	
+
 def main_menu(playersList, tournament):
 	display_menu()
 	display_separator("-")

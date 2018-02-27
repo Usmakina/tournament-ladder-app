@@ -99,10 +99,16 @@ class Match:
 		maxPlayerLen = tournament.getMaxPlayerLen()
 		print(('{:<3}{:<' + str(maxPlayerLen) + '}   vs   {:<' + str(maxPlayerLen) + '}').format(str(count) + ".", player1Name, player2Name))
 		
-	def displayMatch(self, tournament):
+	def displayMatch(self, maxPlayerLen):
 		player1Name = self.player1.getName()
 		player2Name = "bye"
 		if (self.player2 != "bye"):
 			player2Name = self.player2.getName()
-		maxPlayerLen = tournament.getMaxPlayerLen()
 		print(('{} ({})  vs  ({}) {:<' + str(maxPlayerLen) + '}').format(player1Name, self.player1Score, self.player2Score, player2Name))
+		
+	def displayMatchHistory(self, maxPlayerLen):
+		player1Name = self.player1.getName()
+		player2Name = "bye"
+		if (self.player2 != "bye"):
+			player2Name = self.player2.getName()
+		print(('{:>' + str(maxPlayerLen) + '} ({})  vs  ({}) {:<' + str(maxPlayerLen) + '}').format(player1Name, self.player1Score, self.player2Score, player2Name))

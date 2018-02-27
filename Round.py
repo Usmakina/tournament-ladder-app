@@ -29,7 +29,6 @@ class Round:
 		plist.sort(key=lambda x: (x.getMatchPt(), x.getOppMatchPerc(), x.getGamePerc(), x.getOppGamePerc()), reverse=True)
 		matchList = []
 		matchList = self.match(plist, matchList)
-		print()
 		for match in matchList:
 			player1 = match[0]
 			player2 = match[1]
@@ -78,3 +77,6 @@ class Round:
 			match.displayMatches(tournament, count)
 			count += 1
 			
+	def displayRounds(self, maxPlayerLen):
+		for match in self.round:
+			match.displayMatchHistory(maxPlayerLen)

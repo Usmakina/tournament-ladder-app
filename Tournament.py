@@ -36,7 +36,10 @@ class Tournament:
 			
 	def displayTournament(self):
 		count = 1
-		for round in range(0, len(self.tournament)):
-			print("Round " + count + ":")
-			round.displayRound()
+		for round in self.tournament:
+			print("Round " + str(count) + ":")
+			print()
+			round.displayRounds(self.getMaxPlayerLen())
+			if (count != len(self.tournament)):
+				print()
 			count += 1
